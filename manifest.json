@@ -1,0 +1,16 @@
+{
+  "id": "https://nguyentai219.github.io/Hoc/",
+  "name": "Bé Học Đọc Tiếng Anh",
+  "short_name": "Học Tiếng Anh",
+  "description": "Ứng dụng học chữ cái, từ vựng và đọc tiếng Anh cho học sinh lớp 1-2",
+  "start_url": "/Hoc/index.html",
+  "scope": "/Hoc/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#fff8e7",
+  "theme_color": "#ff6b6b",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}
