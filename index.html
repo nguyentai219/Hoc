@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Bé Học Đọc Tiếng Anh</title>
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="theme-color" content="#ff6b6b">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Học Tiếng Anh">
+<style>
+:root{
+  --bg:#fff8e7; --card:#ffffff; --primary:#ff6b6b; --secondary:#4ecdc4;
+  --accent:#ffd93d; --text:#3a3a3a; --shadow:0 6px 0 rgba(0,0,0,0.1);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){ --bg:#241f2e; --card:#332c40; --text:#f2ede4; }
+}
+:root[data-theme="dark"]{ --bg:#241f2e; --card:#332c40; --text:#f2ede4; }
+*{box-sizing:border-box;}
+html{scroll-padding-top:env(safe-area-inset-top,0px);}
+body{
+  margin:0; font-family:'Comic Sans MS','Trebuchet MS',sans-serif;
+  background:var(--bg); color:var(--text); min-height:100%;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+  padding-left:16px; padding-right:16px;
+}
+.wrap{max-width:520px;margin:0 auto;padding:20px 0 40px;}
+h1{text-align:center;font-size:1.5em;color:var(--primary);margin-bottom:4px;}
+.sub{text-align:center;color:var(--secondary);font-weight:bold;margin-bottom:20px;}
+.tabs{display:flex;gap:8px;justify-content:center;margin-bottom:20px;flex-wrap:wrap;}
+.tab{
+  padding:10px 14px;border-radius:20px;border:none;background:var(--card);
+  color:var(--text);font-weight:bold;cursor:pointer;box-shadow:var(--shadow);
+  font-family:inherit;font-size:0.9em;
+}
+.tab.active{background:var(--primary);color:white;}
+.panel{display:none;}
+.panel.active{display:block;}
+.card{
+  background:var(--card);border-radius:20px;padding:26px 20px;text-align:center;
+  box-shadow:var(--shadow);margin-bottom:20px;
+}
+.big-letter{font-size:5em;font-weight:bold;color:var(--primary);margin:0;}
+.emoji{font-size:4em;margin:10px 0;}
+.word{font-size:2.2em;font-weight:bold;color:var(--secondary);margin:6px 0;}
+.phonetic{font-size:1.1em;color:var(--text);opacity:0.7;margin-bottom:10px;}
+.btn-row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:16px;}
+button.action{
+  border:none;border-radius:16px;padding:14px 22px;font-size:1.05em;font-weight:bold;
+  cursor:pointer;font-family:inherit;box-shadow:var(--shadow);color:white;
+}
+.speak{background:var(--secondary);}
+.next{background:var(--primary);}
+.prev{background:#aaa;}
+.save{background:#ffb347;}
+.del{background:#e57373;padding:8px 14px;font-size:0.9em;}
+.progress{text-align:center;margin-bottom:10px;font-weight:bold;color:var(--text);opacity:0.6;}
+.quiz-options{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px;}
+.opt{
+  padding:16px;border-radius:16px;border:2px solid var(--secondary);background:var(--card);
+  color:var(--text);font-size:1.3em;font-weight:bold;cursor:pointer;font-family:inherit;
+}
+.opt.correct{background:#8ee6a0;border-color:#4caf50;}
+.opt.wrong{background:#ff9b9b;border-color:#e53935;}
+.score{text-align:center;font-weight:bold;color:var(--primary);margin-top:10px;}
+.stars{text-align:center;font-size:1.8em;margin-top:10px;}
+input[type=text]{
+  width:100%;padding:14px;border-radius:14px;border:2px solid var(--secondary);
+  font-size:1.2em;font-family:inherit;margin-bottom:10px;background:var(--bg);color:var(--text);
+  text-align:center;
+}
+.hint{font-size:0.95em;opacity:0.7;margin:6px 0;}
+.syll{font-size:1.5em;font-weight:bold;color:var(--primary);margin:8px 0;letter-spacing:2px;}
+.saved-list{margin-top:16px;text-align:left;}
+.saved-item{
+  display:flex;justify-content:space-between;align-items:center;background:var(--card);
+  border-radius:14px;padding:10px 14px;margin-bottom:8px;box-shadow:var(--shadow);
+}
+.saved-item b{color:var(--secondary);}
+.saved-item span.meaning{opacity:0.7;font-size:0.9em;}
+.saved-btns{display:flex;gap:6px;}
+.saved-btns button{border:none;border-radius:10px;padding:6px 10px;cursor:pointer;background:var(--accent);font-family:inherit;}
+.cat-tabs{display:flex;gap:6px;justify-content:center;margin-bottom:14px;flex-wrap:wrap;}
+.cat-tab{
+  padding:8px 12px;border-radius:14px;border:2px solid var(--secondary);background:var(--card);
+  color:var(--text);font-weight:bold;cursor:pointer;font-family:inherit;font-size:0.85em;
+}
+.cat-tab.active{background:var(--secondary);color:white;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>🐣 Bé Học Đọc Tiếng Anh 🐣</h1>
+  <div class="sub">Từ vựng theo chương trình lớp 1 - 2</div>
+
+  <div class="tabs">
+    <button class="tab active" data-panel="alpha">🔤 Chữ cái</button>
+    <button class="tab" data-panel="words">📖 Từ vựng</button>
+    <button class="tab" data-panel="add">➕ Thêm từ</button>
+    <button class="tab" data-panel="quiz">🎯 Đố vui</button>
+  </div>
+
+  <!-- ALPHABET PANEL -->
+  <div class="panel active" id="alpha">
+    <div class="progress" id="alphaProgress"></div>
+    <div class="card">
+      <p class="big-letter" id="alphaLetter">A</p>
+      <div class="emoji" id="alphaEmoji">🍎</div>
+      <p class="word" id="alphaWord">Apple</p>
+      <div class="btn-row"><button class="action speak" onclick="speakAlpha()">🔊 Nghe</button></div>
+      <div class="btn-row">
+        <button class="action prev" onclick="changeAlpha(-1)">⬅ Trước</button>
+        <button class="action next" onclick="changeAlpha(1)">Tiếp ➡</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- WORDS PANEL -->
+  <div class="panel" id="words">
+    <div class="cat-tabs" id="catTabs"></div>
+    <div class="progress" id="wordProgress"></div>
+    <div class="card">
+      <div class="emoji" id="wordEmoji">🐱</div>
+      <p class="word" id="wordText">CAT</p>
+      <p class="phonetic" id="wordMeaning">con mèo</p>
+      <div class="btn-row"><button class="action speak" onclick="speakWord()">🔊 Nghe</button></div>
+      <div class="btn-row">
+        <button class="action prev" onclick="changeWord(-1)">⬅ Trước</button>
+        <button class="action next" onclick="changeWord(1)">Tiếp ➡</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ADD WORD PANEL -->
+  <div class="panel" id="add">
+    <div class="card">
+      <p class="phonetic">Gõ một từ tiếng Anh vào đây:</p>
+      <input type="text" id="newWordInput" placeholder="vd: banana" autocomplete="off">
+      <div class="btn-row"><button class="action save" onclick="lookupWord()">🔍 Tra từ</button></div>
+      <div id="lookupResult"></div>
+    </div>
+    <div class="card">
+      <p class="phonetic" style="margin-bottom:10px;"><b>📒 Từ bé đã lưu</b></p>
+      <div class="saved-list" id="savedList"></div>
+    </div>
+  </div>
+
+  <!-- QUIZ PANEL -->
+  <div class="panel" id="quiz">
+    <div class="card">
+      <div class="emoji" id="quizEmoji">🐶</div>
+      <p class="phonetic">Đây là từ gì?</p>
+      <div class="quiz-options" id="quizOptions"></div>
+      <div class="score" id="quizScore">Điểm: 0 / 0</div>
+      <div class="stars" id="quizStars"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+const alphabet = [
+  {l:'A',w:'Apple',e:'🍎'},{l:'B',w:'Ball',e:'⚽'},{l:'C',w:'Cat',e:'🐱'},
+  {l:'D',w:'Dog',e:'🐶'},{l:'E',w:'Egg',e:'🥚'},{l:'F',w:'Fish',e:'🐟'},
+  {l:'G',w:'Grapes',e:'🍇'},{l:'H',w:'Hat',e:'🎩'},{l:'I',w:'Ice cream',e:'🍦'},
+  {l:'J',w:'Juice',e:'🧃'},{l:'K',w:'Kite',e:'🪁'},{l:'L',w:'Lion',e:'🦁'},
+  {l:'M',w:'Moon',e:'🌙'},{l:'N',w:'Nest',e:'🪺'},{l:'O',w:'Orange',e:'🍊'},
+  {l:'P',w:'Pig',e:'🐷'},{l:'Q',w:'Queen',e:'👑'},{l:'R',w:'Rabbit',e:'🐰'},
+  {l:'S',w:'Sun',e:'☀️'},{l:'T',w:'Tiger',e:'🐯'},{l:'U',w:'Umbrella',e:'☂️'},
+  {l:'V',w:'Van',e:'🚐'},{l:'W',w:'Watch',e:'⌚'},{l:'X',w:'Box',e:'📦'},
+  {l:'Y',w:'Yo-yo',e:'🪀'},{l:'Z',w:'Zebra',e:'🦓'}
+];
+const categories = {
+  greetings:{label:'👋 Chào hỏi', items:[
+    {w:'HELLO',m:'xin chào',e:'👋'},{w:'GOODBYE',m:'tạm biệt',e:'👋'},{w:'YES',m:'vâng/có',e:'✅'},
+    {w:'NO',m:'không',e:'❌'},{w:'PLEASE',m:'làm ơn',e:'🙏'},{w:'THANK YOU',m:'cảm ơn',e:'🙏'},
+    {w:'SORRY',m:'xin lỗi',e:'😔'},{w:'HOW ARE YOU',m:'bạn khỏe không',e:'🙂'}
+  ]},
+  numbers:{label:'🔢 Số đếm', items:[
+    {w:'ONE',m:'số 1',e:'1️⃣'},{w:'TWO',m:'số 2',e:'2️⃣'},{w:'THREE',m:'số 3',e:'3️⃣'},
+    {w:'FOUR',m:'số 4',e:'4️⃣'},{w:'FIVE',m:'số 5',e:'5️⃣'},{w:'SIX',m:'số 6',e:'6️⃣'},
+    {w:'SEVEN',m:'số 7',e:'7️⃣'},{w:'EIGHT',m:'số 8',e:'8️⃣'},{w:'NINE',m:'số 9',e:'9️⃣'},
+    {w:'TEN',m:'số 10',e:'🔟'}
+  ]},
+  family:{label:'👨‍👩‍👧 Gia đình', items:[
+    {w:'MOTHER',m:'mẹ',e:'👩'},{w:'FATHER',m:'bố',e:'👨'},{w:'SISTER',m:'chị/em gái',e:'👧'},
+    {w:'BROTHER',m:'anh/em trai',e:'👦'},{w:'GRANDMOTHER',m:'bà',e:'👵'},{w:'GRANDFATHER',m:'ông',e:'👴'},
+    {w:'BABY',m:'em bé',e:'👶'}
+  ]},
+  body:{label:'🧍 Bộ phận cơ thể', items:[
+    {w:'HEAD',m:'cái đầu',e:'🧠'},{w:'EYE',m:'con mắt',e:'👁️'},{w:'EAR',m:'cái tai',e:'👂'},
+    {w:'NOSE',m:'cái mũi',e:'👃'},{w:'MOUTH',m:'cái miệng',e:'👄'},{w:'HAND',m:'bàn tay',e:'✋'},
+    {w:'LEG',m:'cái chân',e:'🦵'},{w:'FOOT',m:'bàn chân',e:'🦶'}
+  ]},
+  fruits:{label:'🍎 Trái cây', items:[
+    {w:'APPLE',m:'quả táo',e:'🍎'},{w:'BANANA',m:'quả chuối',e:'🍌'},{w:'ORANGE',m:'quả cam',e:'🍊'},
+    {w:'GRAPE',m:'quả nho',e:'🍇'},{w:'MANGO',m:'quả xoài',e:'🥭'},{w:'WATERMELON',m:'dưa hấu',e:'🍉'},
+    {w:'STRAWBERRY',m:'dâu tây',e:'🍓'},{w:'PINEAPPLE',m:'quả dứa',e:'🍍'}
+  ]},
+  animals:{label:'🐾 Con vật', items:[
+    {w:'CAT',m:'con mèo',e:'🐱'},{w:'DOG',m:'con chó',e:'🐶'},{w:'BIRD',m:'con chim',e:'🐦'},
+    {w:'FISH',m:'con cá',e:'🐟'},{w:'ELEPHANT',m:'con voi',e:'🐘'},{w:'MONKEY',m:'con khỉ',e:'🐒'},
+    {w:'HORSE',m:'con ngựa',e:'🐴'},{w:'DUCK',m:'con vịt',e:'🦆'},{w:'CHICKEN',m:'con gà',e:'🐔'},
+    {w:'COW',m:'con bò',e:'🐄'},{w:'BEAR',m:'con gấu',e:'🐻'},{w:'FROG',m:'con ếch',e:'🐸'},
+    {w:'LION',m:'con sư tử',e:'🦁'},{w:'TIGER',m:'con hổ',e:'🐯'},{w:'RABBIT',m:'con thỏ',e:'🐰'},
+    {w:'PIG',m:'con lợn',e:'🐷'},{w:'SHEEP',m:'con cừu',e:'🐑'},{w:'TURTLE',m:'con rùa',e:'🐢'}
+  ]},
+  colors:{label:'🎨 Màu sắc', items:[
+    {w:'RED',m:'màu đỏ',e:'🔴'},{w:'BLUE',m:'màu xanh dương',e:'🔵'},{w:'GREEN',m:'màu xanh lá',e:'🟢'},
+    {w:'YELLOW',m:'màu vàng',e:'🟡'},{w:'BLACK',m:'màu đen',e:'⚫'},{w:'WHITE',m:'màu trắng',e:'⚪'},
+    {w:'ORANGE',m:'màu cam',e:'🟠'},{w:'PURPLE',m:'màu tím',e:'🟣'},{w:'PINK',m:'màu hồng',e:'🌸'},
+    {w:'BROWN',m:'màu nâu',e:'🟤'}
+  ]},
+  school:{label:'✏️ Đồ dùng học tập', items:[
+    {w:'PENCIL',m:'cây bút chì',e:'✏️'},{w:'PEN',m:'cây bút mực',e:'🖊️'},{w:'BOOK',m:'quyển sách',e:'📚'},
+    {w:'BAG',m:'cái cặp sách',e:'🎒'},{w:'RULER',m:'cây thước kẻ',e:'📏'},{w:'ERASER',m:'cục tẩy',e:'🧼'},
+    {w:'SCISSORS',m:'cái kéo',e:'✂️'},{w:'GLUE',m:'keo dán',e:'🧴'},{w:'NOTEBOOK',m:'vở ghi chép',e:'📓'},
+    {w:'CRAYON',m:'bút sáp màu',e:'🖍️'},{w:'CHAIR',m:'cái ghế',e:'🪑'},{w:'TABLE',m:'cái bàn',e:'🗄️'}
+  ]}
+};
+let currentCat = 'greetings';
+// Từ điển tra cứu sẵn có (nghĩa + emoji nếu có)
+const dictionary = {
+  "banana":{m:"quả chuối",e:"🍌"},"orange":{m:"quả cam",e:"🍊"},"grape":{m:"quả nho",e:"🍇"},
+  "watermelon":{m:"dưa hấu",e:"🍉"},"mango":{m:"xoài",e:"🥭"},"strawberry":{m:"dâu tây",e:"🍓"},
+  "bread":{m:"bánh mì",e:"🍞"},"egg":{m:"quả trứng",e:"🥚"},"rice":{m:"cơm/gạo",e:"🍚"},
+  "water":{m:"nước",e:"💧"},"juice":{m:"nước ép",e:"🧃"},"cake":{m:"bánh ngọt",e:"🎂"},
+  "elephant":{m:"con voi",e:"🐘"},"monkey":{m:"con khỉ",e:"🐒"},"horse":{m:"con ngựa",e:"🐴"},
+  "duck":{m:"con vịt",e:"🦆"},"chicken":{m:"con gà",e:"🐔"},"cow":{m:"con bò",e:"🐄"},
+  "bear":{m:"con gấu",e:"🐻"},"frog":{m:"con ếch",e:"🐸"},"butterfly":{m:"con bướm",e:"🦋"},
+  "snake":{m:"con rắn",e:"🐍"},"turtle":{m:"con rùa",e:"🐢"},"sheep":{m:"con cừu",e:"🐑"},
+  "mother":{m:"mẹ",e:"👩"},"father":{m:"bố",e:"👨"},"sister":{m:"chị/em gái",e:"👧"},
+  "brother":{m:"anh/em trai",e:"👦"},"baby":{m:"em bé",e:"👶"},"family":{m:"gia đình",e:"👨‍👩‍👧"},
+  "friend":{m:"bạn bè",e:"🧑‍🤝‍🧑"},"teacher":{m:"cô/thầy giáo",e:"🧑‍🏫"},
+  "school":{m:"trường học",e:"🏫"},"pencil":{m:"cây bút chì",e:"✏️"},"chair":{m:"cái ghế",e:"🪑"},
+  "table":{m:"cái bàn",e:"🪑"},"bag":{m:"cái túi",e:"🎒"},"door":{m:"cái cửa",e:"🚪"},
+  "window":{m:"cửa sổ",e:"🪟"},"clock":{m:"đồng hồ",e:"🕐"},"car":{m:"xe ô tô",e:"🚗"},
+  "bus":{m:"xe buýt",e:"🚌"},"bike":{m:"xe đạp",e:"🚲"},"boat":{m:"con thuyền",e:"⛵"},
+  "plane":{m:"máy bay",e:"✈️"},"train":{m:"tàu hỏa",e:"🚂"},"rain":{m:"mưa",e:"🌧️"},
+  "snow":{m:"tuyết",e:"❄️"},"cloud":{m:"đám mây",e:"☁️"},"wind":{m:"gió",e:"💨"},
+  "flower":{m:"bông hoa",e:"🌸"},"grass":{m:"cỏ",e:"🌱"},"mountain":{m:"núi",e:"⛰️"},
+  "river":{m:"dòng sông",e:"🏞️"},"sea":{m:"biển",e:"🌊"},"happy":{m:"vui vẻ",e:"😄"},
+  "sad":{m:"buồn",e:"😢"},"big":{m:"to/lớn",e:"🐘"},"small":{m:"nhỏ",e:"🐭"},
+  "red":{m:"màu đỏ",e:"🔴"},"blue":{m:"màu xanh dương",e:"🔵"},"green":{m:"màu xanh lá",e:"🟢"},
+  "yellow":{m:"màu vàng",e:"🟡"},"black":{m:"màu đen",e:"⚫"},"white":{m:"màu trắng",e:"⚪"},
+  "one":{m:"số một",e:"1️⃣"},"two":{m:"số hai",e:"2️⃣"},"three":{m:"số ba",e:"3️⃣"},
+  "run":{m:"chạy",e:"🏃"},"jump":{m:"nhảy",e:"🤸"},"eat":{m:"ăn",e:"🍽️"},
+  "sleep":{m:"ngủ",e:"😴"},"play":{m:"chơi",e:"🎮"},"read":{m:"đọc",e:"📖"},
+  "write":{m:"viết",e:"✍️"},"sing":{m:"hát",e:"🎤"},"dance":{m:"nhảy múa",e:"💃"},
+  "swim":{m:"bơi",e:"🏊"},"walk":{m:"đi bộ",e:"🚶"},"fly":{m:"bay",e:"🦅"}
+};
+
+function speak(text){
+  try{
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = 'en-US'; u.rate = 0.8;
+    speechSynthesis.cancel();
+    speechSynthesis.speak(u);
+  }catch(e){}
+}
+
+// tách âm tiết đơn giản để bé đánh vần (ước lượng, không phải phiên âm IPA chuẩn)
+function splitSyllables(word){
+  const vowels = "aeiouyAEIOUY";
+  let parts = []; let current = "";
+  for(let i=0;i<word.length;i++){
+    current += word[i];
+    const isVowel = vowels.includes(word[i]);
+    const nextIsConsonant = i+1<word.length && !vowels.includes(word[i+1]);
+    const nextNextIsVowel = i+2<word.length && vowels.includes(word[i+2]);
+    if(isVowel && nextIsConsonant && nextNextIsVowel){
+      parts.push(current); current = "";
+    }
+  }
+  parts.push(current);
+  return parts.filter(p=>p.length>0).join('-');
+}
+
+let ai = 0;
+function renderAlpha(){
+  const item = alphabet[ai];
+  document.getElementById('alphaLetter').textContent = item.l;
+  document.getElementById('alphaEmoji').textContent = item.e;
+  document.getElementById('alphaWord').textContent = item.w;
+  document.getElementById('alphaProgress').textContent = (ai+1)+' / '+alphabet.length;
+}
+function changeAlpha(d){ ai=(ai+d+alphabet.length)%alphabet.length; renderAlpha(); }
+function speakAlpha(){ const item=alphabet[ai]; speak(item.l+'. '+item.w); }
+
+let wi = 0;
+function currentItems(){ return categories[currentCat].items; }
+function renderWord(){
+  const items = currentItems();
+  const item = items[wi];
+  document.getElementById('wordEmoji').textContent = item.e;
+  document.getElementById('wordText').textContent = item.w;
+  document.getElementById('wordMeaning').textContent = item.m;
+  document.getElementById('wordProgress').textContent = (wi+1)+' / '+items.length;
+}
+function changeWord(d){ const items=currentItems(); wi=(wi+d+items.length)%items.length; renderWord(); }
+function speakWord(){ speak(currentItems()[wi].w); }
+function renderCatTabs(){
+  const el = document.getElementById('catTabs');
+  el.innerHTML = Object.keys(categories).map(key=>
+    `<button class="cat-tab${key===currentCat?' active':''}" onclick="switchCat('${key}')">${categories[key].label}</button>`
+  ).join('');
+}
+function switchCat(key){
+  currentCat = key; wi = 0;
+  renderCatTabs();
+  renderWord();
+}
+
+// ---- Thêm từ mới ----
+function loadSaved(){
+  try{
+    const raw = localStorage.getItem('myWords');
+    return raw ? JSON.parse(raw) : [];
+  }catch(e){ return []; }
+}
+function saveSaved(list){
+  try{ localStorage.setItem('myWords', JSON.stringify(list)); }catch(e){}
+}
+function renderSavedList(){
+  const list = loadSaved();
+  const el = document.getElementById('savedList');
+  if(list.length===0){ el.innerHTML = '<p class="hint">Chưa có từ nào. Bé hãy tra và lưu từ mới nhé!</p>'; return; }
+  el.innerHTML = list.map((item,idx)=>`
+    <div class="saved-item">
+      <div><b>${item.w}</b><br><span class="meaning">${item.m}</span></div>
+      <div class="saved-btns">
+        <button onclick="speak('${item.w.replace(/'/g,"")}')">🔊</button>
+        <button class="del" onclick="deleteSaved(${idx})">✖</button>
+      </div>
+    </div>`).join('');
+}
+function deleteSaved(idx){
+  const list = loadSaved();
+  list.splice(idx,1);
+  saveSaved(list);
+  renderSavedList();
+}
+function lookupWord(){
+  const input = document.getElementById('newWordInput');
+  const raw = input.value.trim();
+  if(!raw) return;
+  const key = raw.toLowerCase();
+  const syll = splitSyllables(raw);
+  const resultEl = document.getElementById('lookupResult');
+  const found = dictionary[key];
+  const emoji = found ? found.e : '📘';
+  if(found){
+    resultEl.innerHTML = `
+      <div class="emoji">${emoji}</div>
+      <p class="word">${raw.toUpperCase()}</p>
+      <p class="syll">${syll}</p>
+      <p class="phonetic">Nghĩa: ${found.m}</p>
+      <div class="btn-row">
+        <button class="action speak" onclick="speak('${raw.replace(/'/g,"")}')">🔊 Nghe đọc</button>
+        <button class="action save" onclick="addToSaved('${raw.replace(/'/g,"")}','${found.m.replace(/'/g,"")}')">💾 Lưu từ này</button>
+      </div>`;
+    speak(raw);
+  } else {
+    resultEl.innerHTML = `
+      <div class="emoji">📘</div>
+      <p class="word">${raw.toUpperCase()}</p>
+      <p class="syll">${syll}</p>
+      <p class="hint">Từ này chưa có trong từ điển của bé. Hãy nhờ bố mẹ nhập nghĩa để lưu lại nhé!</p>
+      <input type="text" id="manualMeaning" placeholder="Nhập nghĩa tiếng Việt">
+      <div class="btn-row">
+        <button class="action speak" onclick="speak('${raw.replace(/'/g,"")}')">🔊 Nghe đọc</button>
+        <button class="action save" onclick="addManual('${raw.replace(/'/g,"")}')">💾 Lưu từ này</button>
+      </div>`;
+    speak(raw);
+  }
+}
+function addToSaved(w,m){
+  const list = loadSaved();
+  if(!list.some(i=>i.w.toLowerCase()===w.toLowerCase())){
+    list.unshift({w:w.toUpperCase(), m});
+    saveSaved(list);
+  }
+  renderSavedList();
+}
+function addManual(w){
+  const meaning = document.getElementById('manualMeaning').value.trim() || '(chưa có nghĩa)';
+  addToSaved(w, meaning);
+}
+
+// ---- Quiz (bao gồm cả từ đã lưu) ----
+let score = 0, total = 0, currentQ = null;
+function quizPool(){
+  const saved = loadSaved().map(i=>({w:i.w, m:i.m, e:'📘'}));
+  const allWords = Object.values(categories).flatMap(c=>c.items);
+  return allWords.concat(saved);
+}
+function newQuiz(){
+  const pool = quizPool();
+  const correct = pool[Math.floor(Math.random()*pool.length)];
+  let opts = new Set([correct.w]);
+  let tries = 0;
+  while(opts.size < Math.min(4,pool.length) && tries<50){
+    opts.add(pool[Math.floor(Math.random()*pool.length)].w);
+    tries++;
+  }
+  opts = Array.from(opts).sort(()=>Math.random()-0.5);
+  currentQ = correct;
+  document.getElementById('quizEmoji').textContent = correct.e;
+  const c = document.getElementById('quizOptions');
+  c.innerHTML = '';
+  opts.forEach(o=>{
+    const btn = document.createElement('button');
+    btn.className = 'opt';
+    btn.textContent = o;
+    btn.onclick = () => checkAnswer(btn, o);
+    c.appendChild(btn);
+  });
+  speak(correct.w);
+}
+function checkAnswer(btn, chosen){
+  total++;
+  const buttons = document.querySelectorAll('.opt');
+  buttons.forEach(b=>b.onclick=null);
+  if(chosen === currentQ.w){
+    btn.classList.add('correct'); score++;
+    document.getElementById('quizStars').textContent = '🌟';
+  } else {
+    btn.classList.add('wrong');
+    buttons.forEach(b=>{ if(b.textContent === currentQ.w) b.classList.add('correct'); });
+    document.getElementById('quizStars').textContent = '💪';
+  }
+  document.getElementById('quizScore').textContent = 'Điểm: '+score+' / '+total;
+  setTimeout(newQuiz, 1400);
+}
+
+document.querySelectorAll('.tab').forEach(tab=>{
+  tab.addEventListener('click', ()=>{
+    document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+    document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+    tab.classList.add('active');
+    document.getElementById(tab.dataset.panel).classList.add('active');
+    if(tab.dataset.panel === 'quiz' && total === 0) newQuiz();
+    if(tab.dataset.panel === 'add') renderSavedList();
+  });
+});
+
+renderAlpha();
+renderCatTabs();
+renderWord();
+renderSavedList();
+
+if('serviceWorker' in navigator){
+  window.addEventListener('load', ()=>{
+    navigator.serviceWorker.register('service-worker.js').catch(()=>{});
+  });
+}
+</script>
+</body>
+</html>
